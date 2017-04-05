@@ -1,0 +1,22 @@
+sudo: required
+
+language: node_js
+node_js: "node"
+
+services:
+  - docker
+
+before_install:
+  - docker build -t vegidio/nginx .
+  - docker run -d -p 80:80 -p 443:443 --name nginx vegidio/nginx
+
+script:
+  - echo "Testing...."
+
+after_success:
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push vegidio/nginx
+
+branches:
+  only:
+    - master
