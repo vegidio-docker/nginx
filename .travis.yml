@@ -10,8 +10,12 @@ before_install:
   - docker build -t vegidio/nginx .
   - docker run -d -p 80:80 -p 443:443 --name nginx vegidio/nginx
 
+before_script:
+  - sleep 10
+  - chmod +x test.sh
+
 script:
-  - echo "Testing...."
+  - ./test.sh
 
 after_success:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
