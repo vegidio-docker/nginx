@@ -34,7 +34,7 @@ In order to enable secure connections in your domain, Certbot needs to validate 
 
 ### Creating a certificate
 
-1. Create a server block following the same pattern of [sb.before.conf](https://github.com/vegidio/docker-nginx/blob/master/sb.before.conf). Remember to replace the **domain.tld** in the file for your real domain.
+1. Create a server block following the same pattern of [sb.example.conf](https://github.com/vegidio/docker-nginx/blob/master/sb.example.conf). Remember to replace the **domain.tld** in the file for your real domain.
 
 2. Start the Nginx container with the server block above and login in the container using `docker exec -it container_name bash`.
 
@@ -48,10 +48,6 @@ certbot certonly --non-interactive --agree-tos \
 ```
 
 After you enter the command above - if everything goes well - the certificate will be generated and saved in the folder `/etc/letsencrypt/live/domain.tld`.
-
-4. Remove the previous server block (step # 1) and create a new one following the same pattern of [sb.after.conf](https://github.com/vegidio/docker-nginx/blob/master/sb.after.conf). Again, remember to replace the **domain.tld** in the file for your real domain.
-
-5. Restart the server.
 
 ### Certificate renewal
 
