@@ -1,5 +1,5 @@
 FROM nginx
-MAINTAINER Vinicius Egidio <vegidio@gmail.com>
+MAINTAINER Vinicius Egidio <me@vinicius.io>
 
 # Installing Let's Encrypt
 RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' | tee /etc/apt/sources.list.d/backports.list

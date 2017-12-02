@@ -53,7 +53,7 @@ After you enter the command above - if everything goes well - the certificate wi
 
 This image is configured to automatically renew all certificates, but if you want to force the certificate renew, you can login on the container image and run the command:
 
-`certbot renew -q --force-renewal --post-hook "nginx -s reload"`
+`$ certbot renew -q --force-renewal --post-hook "nginx -s reload"`
 
 ## Checking your certificate status
 
