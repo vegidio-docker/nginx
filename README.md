@@ -16,6 +16,8 @@ Run the container using pre-built image **vegidio/nginx**:
 
 ```
 $ docker run -d \
+    -v /etc/letsencrypt/certs:/etc/letsencrypt \
+    -v /etc/letsencrypt/libs:/var/lib/letsencrypt \
     -p 80:80 -p 443:443 \
     --name nginx vegidio/nginx
 ```
@@ -25,29 +27,44 @@ $ docker run -d \
 In the project root folder, type:
 
 ```
-$ docker build -t my-nginx-image .
+$ docker build -t vegidio/nginx .
 ```
 
 ## Enabling HTTPS
 
-In order to enable secure connections in your domain, Certbot needs to validate the domain and make sure that you actually own it. There are many ways to do that, but the easiest way is using the [Webroot](https://certbot.eff.org/docs/using.html#webroot) plugin. The instructions here are based on this validation strategy.
+In order to enable secure connections in your domain, Certbot needs to validate the domain and make sure that you actually own it. There are many ways to do that, but the easiest way is using the manual [TXT record challenge](https://certbot.eff.org/docs/using.html#manual) plugin. The instructions here are based on this validation strategy.
 
 ### Creating a certificate
 
-1. Create a server block following the same pattern of [sb.example.conf](https://github.com/vegidio/docker-nginx/blob/master/sb.example.conf). Remember to replace the **domain.tld** in the file for your real domain.
-
-2. Start the Nginx container with the server block above and login in the container using `docker exec -it container_name bash`.
-
-3. After you are in the container's shell enter the command below, but don't forget the replace the values for `--email` with your e-mail address and `--domain` with the domain that you're trying to create the certificate:
+1. In your host server terminal (the server where Docker is installed), please run the command below to validate your domain, but don't forget the replace the values for `--email` with your e-mail address and `--domain` with the domain that you're trying to create the certificate:
 
 ```
-certbot certonly --non-interactive --agree-tos \
+$ docker run \
+    -v /etc/letsencrypt/certs:/etc/letsencrypt \
+    -v /etc/letsencrypt/libs:/var/lib/letsencrypt \
+    -it --rm vegidio/nginx \
+    certbot certonly --agree-tos \
+    --server https://acme-v02.api.letsencrypt.org/directory \
+    --manual --preferred-challenges dns \
     --email email@example.com \
-    --webroot -w /var/www/domain.tld \
-    --domain domain.tld --domain www.domain.tld
+    --domain "domain.tld" --domain "*.domain.tld"
 ```
 
-After you enter the command above - if everything goes well - the certificate will be generated and saved in the folder `/etc/letsencrypt/live/domain.tld`.
+2. After you answer a few questions regarding your domain, Certbot will generate a hash to update your domain with a **TXT record**. The TXT record is named `_acme-challenge` and the hash looks like this `NZXXXLm6LL8uiiqLlqigFTLvB8KZTaFmXXXX` (this is just an example).
+
+If you don't know how to update the TXT record in your domain, please consult the documentation of your domain registrar (Namecheap, GoDaddy, etc).
+
+3. It can take up to a few minutes until your changes in the TXT record are propagated, but you can track if the changes are propagated already by opening a new terminal window and using the command (replaced `domain.tld` with your real domain):
+
+```
+$ dig -t txt _acme-challenge.domain.tld
+```
+
+Keep running the command above every few seconds until you see that the TXT record `_acme-challenge` is already available.
+
+4. After the TXT record is updated, you can return to the original terminal where Certbot is running and continue the validation process. If everything goes well then the certificate and all other necessary files will be generated and saved in the folder `/etc/letsencrypt/` in your host server.
+
+5. You can now start the container and use it.
 
 ### Certificate renewal
 

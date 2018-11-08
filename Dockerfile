@@ -1,13 +1,15 @@
-FROM nginx
+FROM nginx:alpine
 MAINTAINER Vinicius Egidio <me@vinicius.io>
 
 # Installing Let's Encrypt
-RUN echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/backports.list
-RUN apt-get update
-RUN apt-get install -y python-certbot-nginx -t stretch-backports
+RUN apk update
+RUN apk add certbot
 
 # Adding the renew script to the crontab
-ADD renew.sh /etc/cron.daily/renew-certs
-RUN chmod +x /etc/cron.daily/renew-certs
+ADD renew.sh /etc/periodic/daily/certbot-renew
+RUN chmod a+x /etc/periodic/daily/certbot-renew
 
-CMD ["nginx", "-g", "daemon off;"]
+# Configuring the entrypoint
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD /entrypoint.sh
