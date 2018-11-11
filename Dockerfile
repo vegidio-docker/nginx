@@ -2,7 +2,6 @@ FROM nginx:alpine
 MAINTAINER Vinicius Egidio <me@vinicius.io>
 
 # Installing Let's Encrypt
-RUN apk update
 RUN apk add certbot
 
 # Adding the renew script to the crontab
