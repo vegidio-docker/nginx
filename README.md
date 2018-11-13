@@ -4,7 +4,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/vegidio/nginx.svg)](https://store.docker.com/community/images/vegidio/nginx)
 [![Apache 2.0](https://img.shields.io/badge/license-Apache_License_2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-A Docker image for Nginx with [Certbot](https://certbot.eff.org) installed and the auto SSL certificate renewal enabled by default.
+A Docker image for Nginx with [Certbot](https://certbot.eff.org) installed and the auto TLS certificate renewal enabled by default.
 
 This image inherits directly from the [official Nginx image](https://store.docker.com/images/nginx) in the Docker Store.
 
@@ -18,6 +18,7 @@ Run the container using pre-built image **vegidio/nginx**:
 $ docker run -d \
     -v /etc/letsencrypt/certs:/etc/letsencrypt \
     -v /etc/letsencrypt/libs:/var/lib/letsencrypt \
+    -v /etc/nginx/sites:/etc/nginx/conf.d \
     -p 80:80 -p 443:443 \
     --name nginx vegidio/nginx
 ```
@@ -64,17 +65,25 @@ Keep running the command above every few seconds until you see that the TXT reco
 
 4. After the TXT record is updated, you can return to the original terminal where Certbot is running and continue the validation process. If everything goes well then the certificate and all other necessary files will be generated and saved in the folder `/etc/letsencrypt/` in your host server.
 
-5. You can now start the container and use it.
-
 ### Certificate renewal
 
-This image is configured to automatically renew all certificates, but if you want to force the certificate renew, you can login on the container image and run the command:
+This image is configured to automatically renew all certificates when needed, but if you want to force the certificate renew, you can login on the container image and run the command:
 
 `$ certbot renew -q --force-renewal --post-hook "nginx -s reload"`
 
-## Checking your certificate status
+### Checking your certificate status
 
 You can check the status of your certificates accessing the website [crt.sh](https://crt.sh/).
+
+## Creating server blocks
+
+The third volume parameter (`-v`) that you define when you [run](#pre-built-image) the Nginx container refers to folder where your server blacks are stored in the host machine. Any configuration file put there will be automatically loaded by Nginx when it starts.
+
+1. Replace the folder `/etc/nginx/sites` for the correct path location where your server block files are stored in the host machine. The second path `/etc/nginx/conf.d` in the container **must not** be changed.
+
+2. Create a new server block for your site (you can use one of the examples found in the [/serverblock](https://github.com/vegidio/docker-nginx/tree/master/serverblock) folder) in the same directory that you defined above.
+
+3. You can now start the server.
 
 ## License
 
