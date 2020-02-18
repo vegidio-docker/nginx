@@ -1,6 +1,6 @@
 # vegidio/nginx
 
-[![Travis](https://img.shields.io/travis/vegidio/docker-nginx.svg)](https://travis-ci.org/vegidio/docker-nginx/)
+[![Actions](https://github.com/vegidio/docker-nginx/workflows/build/badge.svg)](https://github.com/vegidio/docker-nginx/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/vegidio/nginx.svg)](https://hub.docker.com/r/vegidio/nginx)
 [![Apache 2.0](https://img.shields.io/badge/license-Apache_License_2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 

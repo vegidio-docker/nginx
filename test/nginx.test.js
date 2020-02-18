@@ -4,10 +4,8 @@ beforeAll(() => {
     expect.assertions(3);
 });
 
-describe('Test Nginx', () =>
-{
-    test('Check HTTP response', () =>
-    {
+describe('Test Nginx', () => {
+    test('Check HTTP response', () => {
         return axios.get('http://localhost')
             .then((res) => {
                 expect(res.status).toBe(200);
