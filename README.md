@@ -1,14 +1,14 @@
 # vegidio/nginx
 
-[![Actions](https://github.com/vegidio/docker-nginx/workflows/build/badge.svg)](https://github.com/vegidio/docker-nginx/actions)
+[![Actions](https://github.com/vegidio-docker/nginx/workflows/build/badge.svg)](https://github.com/vegidio-docker/nginx/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/vegidio/nginx.svg)](https://hub.docker.com/r/vegidio/nginx)
 [![Apache 2.0](https://img.shields.io/badge/license-Apache_License_2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 A Docker image for Nginx with [Certbot](https://certbot.eff.org) installed and the auto TLS certificate renewal enabled by default.
 
-This image inherits directly from the [official Nginx image](https://store.docker.com/images/nginx) in the Docker Store.
+This image inherits directly from the [official Nginx image](https://hub.docker.com/_/nginx) in the Docker Store.
 
-## Usage
+## 🤖 Usage
 
 ### Pre-built image
 
@@ -31,7 +31,7 @@ In the project root folder, type:
 $ docker build -t vegidio/nginx .
 ```
 
-## Enabling HTTPS
+## 🔐 Enabling HTTPS
 
 In order to enable secure connections in your domain, Certbot needs to validate the domain and make sure that you actually own it. There are many ways to do that, but the easiest way is using the [TXT record challenge](https://certbot.eff.org/docs/using.html). The instructions here are based on this validation strategy.
 
@@ -45,7 +45,9 @@ Regardless of the method chosen, Plugin or Manual based, before you run any of t
 
 #### Plugins
 
-Example of certificate creation using the Digital Ocean plugin:
+Examples of certificate creation using different could services:
+
+<details><summary>Digital Ocean</summary>
 
 ```
 $ docker run \
@@ -58,6 +60,7 @@ $ docker run \
     --email email@example.com \
     --domain "domain.tld" --domain "*.domain.tld"
 ```
+</details>
 
 #### Manual
 
@@ -102,20 +105,20 @@ $ certbot renew -q --force-renewal --post-hook "nginx -s reload"
 
 You can check the status of your certificates accessing the website [crt.sh](https://crt.sh).
 
-## Creating server blocks
+## 🧩 Creating server blocks
 
 The third volume parameter (`-v`) that you define when you [run](#pre-built-image) the Nginx container refers to folder where your server blocks are stored in the host machine. Any configuration file put there will be automatically loaded by Nginx when it starts.
 
 1. Replace the folder `/etc/nginx/sites` for the correct path location where your server block files are stored in the host machine. The second path `/etc/nginx/conf.d` in the container **must not** be changed.
 
-2. Create a new server block for your site (you can use one of the examples found in the [/serverblock](https://github.com/vegidio/docker-nginx/tree/master/serverblock) folder) in the same directory that you defined above.
+2. Create a new server block for your site (you can use one of the examples found in the [/serverblock](https://github.com/vegidio-docker/nginx/tree/master/serverblock) folder) in the same directory that you defined above.
 
 3. You can now start the server.
 
-## License
+## 📝 License
 
 **vegidio/nginx** is released under the Apache License. See [LICENSE](LICENSE.txt) for details.
 
-## Author
+## 👨🏾‍💻 Author
 
 Vinicius Egidio ([vinicius.io](http://vinicius.io))
