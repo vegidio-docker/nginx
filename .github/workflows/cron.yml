@@ -10,7 +10,7 @@ env:
 jobs:
   push:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v1
@@ -23,7 +23,7 @@ jobs:
       - name: Setting CalVer
         id: calver
         run: |
-          echo "::set-output name=date::$(date +'%y.%m')"
+          echo "::set-output name=date::$(date +'%y.%-m')"
 
       - name: Build and run the Docker image
         run: |
