@@ -1,8 +1,8 @@
 # vegidio/nginx
 
-[![Actions](https://github.com/vegidio-docker/nginx/workflows/build/badge.svg)](https://github.com/vegidio-docker/nginx/actions)
+[![GitHub Actions](https://img.shields.io/github/workflow/status/vegidio-docker/nginx/build)](https://github.com/vegidio-docker/nginx/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/vegidio/nginx.svg)](https://hub.docker.com/r/vegidio/nginx)
-[![Apache 2.0](https://img.shields.io/badge/license-Apache_License_2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![ISC License](https://img.shields.io/npm/l/vimdb?color=important)](LICENSE.txt)
 
 A Docker image for Nginx with [Certbot](https://certbot.eff.org) installed and the auto TLS certificate renewal enabled by default.
 
@@ -10,25 +10,15 @@ This image inherits directly from the [official Nginx image](https://hub.docker.
 
 ## 🤖 Usage
 
-### Pre-built image
-
-Run the container using pre-built image **vegidio/nginx**:
+Run the container using image **vegidio/nginx**:
 
 ```
 $ docker run -d \
-    --mount type=bind,source=/etc/letsencrypt/certs,target=/etc/letsencrypt \
-    --mount type=bind,source=/etc/letsencrypt/libs,target=/var/lib/letsencrypt \
-    --mount type=bind,source=/etc/nginx/sites,target=/etc/nginx/conf.d \
+    -v /etc/letsencrypt/certs:/etc/letsencrypt \
+    -v /etc/letsencrypt/libs:/var/lib/letsencrypt \
+    -v /etc/nginx/sites:/etc/nginx/conf.d \
     -p 80:80 -p 443:443 \
     --name nginx vegidio/nginx
-```
-
-### Build the image
-
-In the project root folder, type:
-
-```
-$ docker build -t vegidio/nginx .
 ```
 
 ## 🔐 Enabling HTTPS
@@ -99,7 +89,7 @@ This image is configured to automatically renew all certificates created using o
 $ certbot renew -q --force-renewal --post-hook "nginx -s reload"
 ```
 
-**Attention:** Certificates that were created using the [Manual](#manual) method cannot be automatically renewed. Before the certificate is about to expire, you need create a brand new certificate. 
+**Attention:** Certificates that were created using the [Manual](#manual) method cannot be automatically renewed. Before the certificate is about to expire, you need create a brand new certificate.
 
 ### Checking your certificate status
 
@@ -115,9 +105,17 @@ The third volume parameter (`-v`) that you define when you [run](#pre-built-imag
 
 3. You can now start the server.
 
+## 🛠 Build the image
+
+If you prefer to build this image yourself, instead of using the pre-built image available on [Docker Hub](https://hub.docker.com/r/vegidio/nginx), then enter the following command in terminal, in the project's root directory:
+
+```
+$ docker build -t vegidio/nginx --build-arg VERSION=1.2.3 .
+```
+
 ## 📝 License
 
-**vegidio/nginx** is released under the Apache License. See [LICENSE](LICENSE.txt) for details.
+**vegidio/nginx** is released under the ISC License. See [LICENSE](LICENSE.txt) for details.
 
 ## 👨🏾‍💻 Author
 

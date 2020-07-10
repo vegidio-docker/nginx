@@ -1,6 +1,10 @@
 FROM nginx:alpine
 LABEL maintainer="Vinicius Egidio <me@vinicius.io>"
 
+# Define the image version
+ARG VERSION
+ENV IMAGE_VERSION=$VERSION
+
 # Installing Certbot
 RUN apk --upgrade --no-cache add py-pip certbot \
     -X http://dl-cdn.alpinelinux.org/alpine/edge/main \
